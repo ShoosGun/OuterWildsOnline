@@ -1,4 +1,5 @@
 ﻿using System;
+using OuterWildsOnline.SyncObjects;
 using UnityEngine;
 
 namespace OuterWildsOnline
@@ -133,7 +134,7 @@ namespace OuterWildsOnline
             flashLight.transform.localRotation = playerFlashLight.localRotation;
 
 
-            remotePlayer.AddComponent<SyncObjects.PlayerToReceiveSync>();
+            remotePlayer.AddComponent<PlayerToReceiveSync>();
 
             //remotePlayer.AddComponent<LockOnReticule>().Init();
             return remotePlayer;
@@ -214,7 +215,7 @@ namespace OuterWildsOnline
             Utils.RemoveCollisionFromObjectRecursively(remotePlayerShip.transform);
             remotePlayerShip.AddComponent<ThrusterWashControllerSync>();
 
-            remotePlayerShip.AddComponent<SyncObjects.ShipToReceiveSync>();
+            remotePlayerShip.AddComponent<ShipToReceiveSync>();
 
             remotePlayerShip.SetActive(false);
 
@@ -271,7 +272,7 @@ namespace OuterWildsOnline
             remoteStick.localPosition -= Vector3.forward * 0.1f;
             remoteStick.GetChild(0).gameObject.AddComponent<SimpleRemoteInterpolation>();
             remoteStick.GetChild(0).localPosition = Vector3.forward;
-            remoteStick.gameObject.AddComponent<SyncObjects.RoastingStickToRecieveSync>();
+            remoteStick.gameObject.AddComponent<RoastingStickToRecieveSync>();
             remoteStick.DestoryChildrenWithNameRecursively("RoastingStick_Arm");
             remoteStick.gameObject.SetActive(false);
             remoteStick.localScale = Vector3.one * 0.6f;
@@ -293,7 +294,49 @@ namespace OuterWildsOnline
         public static GameObject CreateRaftRemoteCopy() 
         {
 
-            return null;
+            Transform remoteRaft = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;            //new GameObject("Remote Raft").transform;
+            remoteRaft.name = "Remote Raft";
+            remoteRaft.GetComponent<Collider>().enabled = false;
+            //GameObject.Instantiate(GameObject.Find("Raft_Body")).transform;
+
+            //string[] listOfObjectsToFind = new string[]
+            //{
+            //    "ChurnParticles",
+            //    "ImpactAudio",
+            //    "MovementAudio",
+            //    "Structure_IP_Raft",
+            //    "Proxy_IP_Structure_Raft",
+            //    "RaftAudio_OneShot"
+            //    //"PushInteractCollider",
+            //    //"RideVolume"
+            //};
+            //void AddChildren(Transform t)
+            //{
+            //   var g = GameObject.Instantiate(t.gameObject);
+            //    g.transform.parent = remoteRaft.transform;
+            //    g.transform.localPosition = t.localPosition;
+            //    g.transform.localRotation = t.localRotation;
+            //}
+
+            //FindAndDoAction(GameObject.Find("Raft_Body").transform, AddChildren, true, listOfObjectsToFind);
+            ////TODO copiar as partes do Raft_Body no lugar de copiar ele mesmo
+
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<RaftController>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<RaftEffectsController>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<LODGroup>());
+            ////remoteRaft.GetComponent<OWRigidbody>().enabled = false;
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<ImpactSensor>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<ImpactSensor>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<OWRigidbody>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<Rigidbody>());
+            ////GameObject.DestroyImmediate(remoteRaft.GetComponent<CenterOfTheUniverseOffsetApplier>());
+
+            remoteRaft.gameObject.AddComponent<SimpleRemoteInterpolation>();
+            remoteRaft.gameObject.AddComponent<ObjectToRecieveSync>();
+
+            remoteRaft.gameObject.SetActive(false);
+
+            return remoteRaft.gameObject;
         }
     }
 }

@@ -357,8 +357,8 @@ namespace OuterWildsOnline
             StartCoroutine(GetClosestSectorToPlayer(2f));
             StartCoroutine(SendJoinedGameMessage());
             //StartCoroutine(ReloadAllRemoteUsers(2f));
-            StartCoroutine(CreateObjectClones(0.7f));
-            StartCoroutine(SetObjectsToSync(0.5f));
+            StartCoroutine(CreateObjectClones(0.35f));
+            StartCoroutine(SetObjectsToSync(0.7f));
             StartCoroutine(InstantiateNewSyncObjects(1f));
         }
         private static void OnExitToMainMenuPatch()
@@ -403,6 +403,8 @@ namespace OuterWildsOnline
             ModHelper.Console.WriteLine("Probe added to clone bay");
             RemoteObjects.CloneStorage.Add("RoastingStick", CreateRemoteCopies.CreateRoastingStickRemoteCopy());
             ModHelper.Console.WriteLine("RoastingStick added to clone bay");
+            RemoteObjects.CloneStorage.Add("Raft", CreateRemoteCopies.CreateRaftRemoteCopy());
+            ModHelper.Console.WriteLine("Raft added to clone bay");
         }
         private IEnumerator SetObjectsToSync(float delay)
         {
@@ -410,7 +412,11 @@ namespace OuterWildsOnline
             Locator.GetPlayerTransform().gameObject.AddComponent<PlayerToSendSync>();
             Locator.GetShipBody().gameObject.AddComponent<ShipToSendSync>();
             Locator.GetProbe().gameObject.AddComponent<ProbeToSendSync>();
-            Locator.GetPlayerTransform().Find("RoastingSystem/Stick_Root").GetChild(0).gameObject.AddComponent<RoastingStickToSendSync>();      
+            Locator.GetPlayerTransform().Find("RoastingSystem/Stick_Root").GetChild(0).gameObject.AddComponent<RoastingStickToSendSync>();
+
+            Transform raftsParent = GameObject.Find("Raft_Body").transform.parent;
+            for(int i=0; i< raftsParent.childCount; i++)
+                raftsParent.GetChild(i).gameObject.AddComponent<RaftToSendSync>();
         }
 
         #region ObjectAdditionRemovalAndUpdate
@@ -508,7 +514,7 @@ namespace OuterWildsOnline
                     else
                         SpawnRemoteObject(user.Id, data);
                 }
-                //If it is still in the objectsFromUser list then it isn no longer inside that user variables, which means it is no longer an existing object
+                //If it is still in the objectsFromUser list then it is no longer inside that user variables, which means it is no longer an existing object
                 foreach (var obj in existingObjectsFromUser)
                 {
                     ModHelper.Console.WriteLine($"The object {obj.ObjectName} ({obj.ObjectId}) from {obj.UserId} no longer exists");
