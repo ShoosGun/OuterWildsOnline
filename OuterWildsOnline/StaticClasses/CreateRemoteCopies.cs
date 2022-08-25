@@ -279,7 +279,7 @@ namespace OuterWildsOnline
 
             return remoteStick.gameObject;
         }
-      
+
         //Raft_Body
         //Disable:
         //Detector_Raft
@@ -291,35 +291,53 @@ namespace OuterWildsOnline
         //ChurnParticles (Particles)
         //ImpactAudio (Audio)
         //MovementAudio (Audio)
-        public static GameObject CreateRaftRemoteCopy() 
+        public static GameObject CreateRaftRemoteCopy()
         {
 
-            Transform remoteRaft = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;            //new GameObject("Remote Raft").transform;
+            Transform remoteRaft = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
             remoteRaft.name = "Remote Raft";
-            remoteRaft.GetComponent<Collider>().enabled = false;
+
+            try
+            {
+                AssetBundle raftBundle = ConnectionController.ModHelperInstance.Assets.LoadBundle("raftmeshes");
+                ConnectionController.ModHelperInstance.Console.WriteLine("Name: " + raftBundle.name);
+                GameObject raftPrefab = raftBundle.LoadAsset<GameObject>("Raft");
+                ConnectionController.ModHelperInstance.Console.WriteLine("Prefab: " + raftPrefab.name);
+                var obj = GameObject.Instantiate<GameObject>(raftPrefab);
+                obj.transform.parent = remoteRaft;
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localScale = Vector3.one;
+                obj.transform.localRotation = Quaternion.identity;
+                obj.SetActive(true);
+            }
+            catch (Exception ex) 
+            {
+                ConnectionController.ModHelperInstance.Console.WriteLine("Erro: " + ex.Message);
+            }
+            //remoteRaft.GetComponent<Collider>().enabled = false;
             //GameObject.Instantiate(GameObject.Find("Raft_Body")).transform;
 
-            //string[] listOfObjectsToFind = new string[]
-            //{
-            //    "ChurnParticles",
-            //    "ImpactAudio",
-            //    "MovementAudio",
-            //    "Structure_IP_Raft",
-            //    "Proxy_IP_Structure_Raft",
-            //    "RaftAudio_OneShot"
-            //    //"PushInteractCollider",
-            //    //"RideVolume"
-            //};
-            //void AddChildren(Transform t)
-            //{
-            //   var g = GameObject.Instantiate(t.gameObject);
-            //    g.transform.parent = remoteRaft.transform;
-            //    g.transform.localPosition = t.localPosition;
-            //    g.transform.localRotation = t.localRotation;
-            //}
+            string[] listOfObjectsToFind = new string[]
+            {
+                "ChurnParticles",
+                "ImpactAudio",
+                "MovementAudio",
+                "Structure_IP_Raft",
+                "Proxy_IP_Structure_Raft",
+                "RaftAudio_OneShot"
+                //"PushInteractCollider",
+                //"RideVolume"
+            };
+            void AddChildren(Transform t)
+            {
+                var g = GameObject.Instantiate(t.gameObject);
+                g.transform.parent = remoteRaft.transform;
+                g.transform.localPosition = t.localPosition;
+                g.transform.localRotation = t.localRotation;
+            }
 
             //FindAndDoAction(GameObject.Find("Raft_Body").transform, AddChildren, true, listOfObjectsToFind);
-            ////TODO copiar as partes do Raft_Body no lugar de copiar ele mesmo
+
 
             ////GameObject.DestroyImmediate(remoteRaft.GetComponent<RaftController>());
             ////GameObject.DestroyImmediate(remoteRaft.GetComponent<RaftEffectsController>());
@@ -332,7 +350,7 @@ namespace OuterWildsOnline
             ////GameObject.DestroyImmediate(remoteRaft.GetComponent<CenterOfTheUniverseOffsetApplier>());
 
             remoteRaft.gameObject.AddComponent<SimpleRemoteInterpolation>();
-            remoteRaft.gameObject.AddComponent<ObjectToRecieveSync>();
+            remoteRaft.gameObject.AddComponent<RaftToReceiveSync>();
 
             remoteRaft.gameObject.SetActive(false);
 

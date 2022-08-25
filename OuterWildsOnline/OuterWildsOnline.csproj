@@ -392,6 +392,7 @@
     <Compile Include="SyncClasses\PlayerFlashlightSync.cs" />
     <Compile Include="SyncClasses\PlayerHeadSync.cs" />
     <Compile Include="SyncObjects\GameObjectsToReceiveSync\NomaiHandsToReceiveSync.cs" />
+    <Compile Include="SyncObjects\GameObjectsToReceiveSync\RaftToReceiveSync.cs" />
     <Compile Include="SyncObjects\GameObjectsToReceiveSync\RoastingStickToRecieveSync.cs" />
     <Compile Include="SyncObjects\GameObjectsToSendSync\PlayerToSendSync.cs" />
     <Compile Include="SyncObjects\GameObjectsToSendSync\RaftToSendSync.cs" />
@@ -425,6 +426,7 @@
     <Compile Include="SyncObjects\GameObjectsToReceiveSync\ShipToReceiveSync.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AssetBundle\raftmeshes" />
     <None Include="default-config.json" />
     <None Include="gizmos-master\.gitattributes" />
     <None Include="gizmos-master\Editor.meta" />

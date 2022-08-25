@@ -29,7 +29,6 @@ namespace OuterWildsOnline.SyncObjects
 
         public virtual void ConfigChanged(OWML.Common.IModConfig config)
         {
-
         }
         protected void SetObjectName(string objectName)
         {
